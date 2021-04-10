@@ -1,0 +1,170 @@
+
+1/ Set environment
+
+KNL environment:
+	module add craype-mic-knl
+
+SKL environment:
+	module add craype-x86-skylake
+
+Intel and MPI environment:
+	module add intel/19.0.5 impi/19.0.5
+
+2/ Installation
+ScaLAPACK can be installed with make. The configuration must be set in the SLmake.inc file. A SLmake.inc.example for a Linux machine running GNU compilers is given in the main directory. 
+  
+a/ Firstly, you need to copy SLmake.in.example to SLmake.inc. In SLmake.inc file, you need to modify:
+
++ The fortran and C compilers, loaders, and their flags as below,
+   On KNL:
+	FC            = mpiifort
+	CC            = mpiicc
+	NOOPT         = -O0
+	FCFLAGS       = -O3 -qopenmp -xMIC-AVX512 $(MY_FLAGS)
+	CCFLAGS       = -O3 -qopenmp -xMIC-AVX512 $(MY_FLAGS)
+
+   On SKL:
+	FC            = mpiifort
+	CC            = mpiicc
+	NOOPT         = -O0
+	FCFLAGS       = -O3 -qopenmp -xCORE-AVX512 $(MY_FLAGS)
+	CCFLAGS       = -O3 -qopenmp -xCORE-AVX512 $(MY_FLAGS)
+
++ BLAS, LAPACK (and possibly other) libraries needed for linking test programs
+   BLASLIB       =  -L$(MKLLIB)/ -lmkl_gf_lp64 -lmkl_sequential -lmkl_blas95_lp64 -lgfortran     -lmkl_core  -lmemkind $locate_of_memkind_library_on your_computer
+   LAPACKLIB      = -L$(MKLLIB)/ -lmkl_lapack95_ilp64
+
+b/ Add userdgemm routine in libscalapack.a
++ Define userdgemm in PBLAS/SRC/PBblas.h file
++ Make object file: userdgemm.o
++ Add object file to library: ar -crv libscalapack.a userdgemm.o
++ Modify dgemm routine in PBLAS/SRC/PTOOL/PB_Cdtypeset.c to userdgemm
+
+c/ Modify value of pilaenv.f
+	On KNL and SKL, the value in pilaenv.f file need to set as 336 and 384, respectively.
+
+3/ Submit a job on NURION
+a/ KNL environment
+	#!/bin/bash
+	#PBS -V
+	#PBS -N TEST
+	#PBS -q normal
+	#PBS -A etc
+	#PBS -l walltime=06:00:00
+	#PBS -l select=4:ncpus=68:mpiprocs=1:ompthreads=68
+
+b/ SKL environment
+	#!/bin/bash
+	#PBS -V
+	#PBS -N TEST
+	#PBS -q norm_skl
+	#PBS -A etc
+	#PBS -l walltime=06:00:00
+	#PBS -l select=4:ncpus=40:mpiprocs=1:ompthreads=40
+
+
+4/ Testing
+a/ Create random matrix
+	void row_major_matrix(double      *mm,
+                      const int    nrow,
+                      const int    ncol,
+                      const int    seed,
+                      const double lb,
+                      const double rb)
+	{
+ 	 int i;
+ 	 VSLStreamStatePtr stm;
+  
+  	vslNewStream(&stm, VSL_BRNG_MT19937, seed);
+  	#pragma ivdep
+  	for(i = 0; i < nrow; ++i)
+  	{
+   		 vdRngUniform(VSL_RNG_METHOD_UNIFORM_STD_ACCURATE,stm,ncol,&mm[i*ncol],lb,rb);
+  	}
+ 	 vslDeleteStream(&stm);
+	}
+
+b/ Test file
+int main(int argc, char **argv) {
+        int i, j, k;
+        int myrank_mpi, nprocs_mpi;
+        int ictxt, nprow, npcol, myrow, mycol,nb;
+        int info,itemp;
+        int ZERO=0, ONE=1, TWO=2;
+        nprow = 2; npcol = 2; 
+        nb =336; //384
+        int M=20000;
+        int N=20000;
+        int K=20000;
+
+        const int i_zero=0, i_one=1, i_four=4, i_negone=-1;
+        blacs_pinfo_( &myrank_mpi, &nprocs_mpi ) ;
+        blacs_get_( &i_negone, &i_zero, &ictxt );
+        blacs_gridinit_( &ictxt, "R", &nprow, &npcol );
+        blacs_gridinfo_( &ictxt, &nprow, &npcol, &myrow, &mycol );
+
+
+        int rA = numroc_( &M, &nb, &myrow, &ZERO, &nprow );
+        int cA = numroc_( &K, &nb, &mycol, &ZERO, &npcol );
+        int rB = numroc_( &K, &nb, &myrow, &ZERO, &nprow );
+        int cB = numroc_( &N, &nb, &mycol, &ZERO, &npcol );
+        int rC = numroc_( &M, &nb, &myrow, &ZERO, &nprow );
+        int cC = numroc_( &N, &nb, &mycol, &ZERO, &npcol );
+
+        double *A = (double*) malloc(rA*cA*sizeof(double));
+        double *B = (double*) malloc(rB*cB*sizeof(double));
+        double *C = (double*) malloc(rC*cC*sizeof(double));
+
+        int descA[9],descB[9],descC[9];
+
+        descinit_(descA, &M,   &K,   &nb,  &nb,  &ZERO, &ZERO, &ictxt, &rA,  &info);
+        descinit_(descB, &K,   &N,   &nb,  &nb,  &ZERO, &ZERO, &ictxt, &rB,  &info);
+        descinit_(descC, &M,   &N,   &nb,  &nb,  &ZERO, &ZERO, &ictxt, &rC,  &info);
+
+        double alpha = 1.0; double beta = 1.0;
+        double start, end, flops,f, norm, start2, end2;
+        srand(time(NULL));
+
+        int randa = 777 + npcol*myrow + mycol;
+        int randb = 888 + npcol*myrow + mycol;
+        int randc = 999 + npcol*myrow + mycol;
+        row_major_matrix(&A[0], rA, cA, randa,  -1.0,  1.0);
+        row_major_matrix(&B[0], rB, cB, randb,  -1.0,  1.0);
+        row_major_matrix(&C[0], rC, cC, randc,  -1.0,  1.0);
+         
+        for (j=0; j<4; j++)
+        {
+                Cblacs_barrier(ictxt, "All");
+                start2=MPI_Wtime();
+
+                pdgemm_("N", "N", &M , &N , &K , &alpha, A , &ONE, &ONE , descA , B , &ONE, &ONE , descB , &beta , C , &ONE, &ONE , descD );
+
+                Cblacs_barrier(ictxt, "All");
+                end2=MPI_Wtime();//*/
+                if (myrow==0 && mycol==0)
+                {
+                         
+                        flops = 2 * (double) M * (double) N * (double) K / (end2-start2) / 1e9;
+                        printf("duration=%f; flops=%f Gflops", end2-start2,flops);
+                }
+        }
+        free(A);
+        free(B);
+        free(C);
+        Cblacs_gridexit( 0 );
+        MPI_Finalize();
+        return 0;
+}
+
+c/ Makefile
++ On SKL:
+	 mpiicc testfile.c -O3 -qopenmp -mkl  -xCORE-AVX512 -restrict \
+                      -o testfile  -lifcore -lmkl_blacs_intelmpi_lp64   $path_to_ScaLAPACK_libray/libscalapack.a   
+              mpirun  -np 4 ./testfile >> result.txt
+
++ On KNL:
+	 mpiicc testfile -O3 -qopenmp $path_to_high_bandwidth_memory -lmemkind -mkl  -xMIC-AVX512 -restrict \
+                      -o testfile  -lifcore    $path_to_ScaLAPACK_libray/libscalapack.a
+           mpirun  -np 4 ./testfile >> result.txt
+
+
