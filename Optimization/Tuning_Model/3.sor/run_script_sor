@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#./sor [matrix_size] [single|double] [divide_val] [num_threads]
+#1.matrix_size	:|512 |1024 |2048 |4096 |
+#2.single_double:|0. double |1. single |
+#3.divide_val	:|1 |4 |8 |16 |32 |64 |128 |256 |512 |
+#4.num_threads	:from 64 to 1024 with step =32
+
+#./sor 512 1 1 128
+
+echo "Running..."
+FOLDER="../output/sor/"
+FILENAME=""
+results=""
+
+for sp in {0..1}
+do
+	FILENAME="SOR"
+	if [ $sp -eq 1 ]
+	then
+		FILENAME1="${FILENAME}_SP"
+	else
+		FILENAME1="${FILENAME}_DP"
+	fi
+	for matrix_size in 512 1024 2048 4096
+	do
+		FILENAME="${FILENAME1}"$'_'"${matrix_size}"$'x'"${matrix_size}"
+		for divide_val in 1 4 8 16 32 64 128 256 512
+		do
+			for num_threads in {64..1024..32}
+			do
+				results="${results}"$'\n'"$(./sor $matrix_size $sp $divide_val $num_threads)"
+			done
+		done
+		echo "${results}" > "${FOLDER}""${FILENAME}"
+	done
+	results=""
+done

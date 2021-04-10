@@ -1,0 +1,1 @@
+nvcc -gencode arch=compute_20,code=sm_20 -gencode arch=compute_35,code=sm_35 --compiler-options -fno-strict-aliasing -lineinfo -use_fast_math -Xptxas -dlcm=cg s_mm_1D.cu -o s_mm_1D_wo_ro

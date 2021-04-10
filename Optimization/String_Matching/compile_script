@@ -1,0 +1,8 @@
+/usr/local/cuda-7.0/bin/nvcc -O3 --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  "src/ac.o" "src/ac.cu"
+/usr/local/cuda-7.0/bin/nvcc -O3 --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  "src/ac_test.o" "src/ac_test.cu"
+/usr/local/cuda-7.0/bin/nvcc -O3 --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  "src/functions.o" "src/functions.cu"
+/usr/local/cuda-7.0/bin/nvcc -O3 --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  "src/helper_stt.o" "src/helper_stt.cu"
+/usr/local/cuda-7.0/bin/nvcc -O3 --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  "src/logg.o" "src/logg.cu"
+/usr/local/cuda-7.0/bin/nvcc -O3 --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  "src/readfile.o" "src/readfile.cu"
+/usr/local/cuda-7.0/bin/nvcc --cudart static --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35 -link -o  "pm"  src/ac.o src/ac_test.o src/functions.o src/helper_stt.o src/logg.o src/readfile.o 
+

@@ -1,0 +1,7 @@
+/usr/local/cuda-7.0/bin/nvcc -lineinfo -O3 --use_fast_math --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  lbm.o lbm.cu
+/usr/local/cuda-7.0/bin/nvcc -lineinfo -O3 --use_fast_math --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  lbm_cuda.o lbm_cuda.cu
+/usr/local/cuda-7.0/bin/nvcc -lineinfo -O3 --use_fast_math --compile --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35  -x cu -o  main.o main.cu
+/usr/local/cuda-7.0/bin/nvcc --cudart static --relocatable-device-code=false -gencode arch=compute_35,code=compute_35 -gencode arch=compute_35,code=sm_35 -link -o  lbm  lbm.o lbm_cuda.o main.o   
+
+
+
