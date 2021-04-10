@@ -7,7 +7,8 @@
 
 
 2. SparseMatrix
-
+  
 
 
 3. Optimization
+  - Four implementations with optimization techniques are listed. Instructions to run the applications are explained.
