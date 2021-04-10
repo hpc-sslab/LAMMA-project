@@ -1,0 +1,172 @@
+id 0
+17.17x4kernel31x8x3_124x20000x378_620+160
+mflop 1733.320435
+mu 31
+nu 8
+ku 3
+mb 124
+nb 20000
+kb 378
+prefetchA1 620
+prefetchA2 0
+prefetchB1 160
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 1
+17.17x4kernel31x8x3_124x20000x415_620+160
+mflop 1730.903564
+mu 31
+nu 8
+ku 3
+mb 124
+nb 20000
+kb 415
+prefetchA1 620
+prefetchA2 0
+prefetchB1 160
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 2
+17.17x4kernel31x8x3_93x20000x440_620+160
+mflop 1721.426758
+mu 31
+nu 8
+ku 3
+mb 93
+nb 20000
+kb 440
+prefetchA1 620
+prefetchA2 0
+prefetchB1 160
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 3
+17.17x4kernel31x8x2_124x20000x378_620+160
+mflop 1717.522339
+mu 31
+nu 8
+ku 2
+mb 124
+nb 20000
+kb 378
+prefetchA1 620
+prefetchA2 0
+prefetchB1 160
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 4
+17.17x4kernel31x8x3_93x20000x488_620+160
+mflop 1717.192261
+mu 31
+nu 8
+ku 3
+mb 93
+nb 20000
+kb 488
+prefetchA1 620
+prefetchA2 0
+prefetchB1 160
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 5
+17.17x4kernel31x8x3_124x20000x341_620+160
+mflop 1716.461060
+mu 31
+nu 8
+ku 3
+mb 124
+nb 20000
+kb 341
+prefetchA1 620
+prefetchA2 0
+prefetchB1 160
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 6
+17.17x4kernel31x8x3_124x20000x378_744+192
+mflop 1715.958130
+mu 31
+nu 8
+ku 3
+mb 124
+nb 20000
+kb 378
+prefetchA1 744
+prefetchA2 0
+prefetchB1 192
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 7
+17.17x4kernel31x8x3_93x20000x488_744+192
+mflop 1707.714233
+mu 31
+nu 8
+ku 3
+mb 93
+nb 20000
+kb 488
+prefetchA1 744
+prefetchA2 0
+prefetchB1 192
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 8
+17.17x4kernel31x8x2_93x20000x488_620+160
+mflop 1706.565552
+mu 31
+nu 8
+ku 2
+mb 93
+nb 20000
+kb 488
+prefetchA1 620
+prefetchA2 0
+prefetchB1 160
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+id 9
+17.17x4kernel31x8x3_93x20000x536_620+160
+mflop 1703.994141
+mu 31
+nu 8
+ku 3
+mb 93
+nb 20000
+kb 536
+prefetchA1 620
+prefetchA2 0
+prefetchB1 160
+prefetchB2 0
+nPack 17
+ni 17
+njr 4
+-------------------------------------
+total time cost : 2154.840223
+total number of kernel : 694
