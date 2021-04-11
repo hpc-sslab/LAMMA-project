@@ -7,7 +7,8 @@
 
 
 2. SparseMatrix
-  
+  - Implementations of mutiphysics, multiscale phenomena, that is, Darcy flow with heterogeneous permeability tensor,
+steady state Stokes flow, Efficient 2,3 point quadrature rules on quadrilaterals with nonconforming finite element, and generalized multiscale finite element method for multiscale elliptic problems are listed. In each problem, the resulting discrete linear system is solved by iterative solver(CG, MINRES, AMG etc).
 
 
 3. Optimization

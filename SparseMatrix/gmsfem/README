@@ -1,0 +1,4 @@
+This directory includes source codes to solve elliptic PDEs with generalized multiscale finite element method for the family of nonconforming quadrilateral element, p1nc and DSSY with three and four degrees of freedom respectively.
+
+Conjugate solver is used for sparse iterative solver.
+

@@ -1,0 +1,7 @@
+This directory includes source codes to solve elliptic PDEs with simple quadrature rules for the family of nonparametric nonconforming quadrilateral element with four degrees of freedom.
+
+It also includes test data files.   
+
+Use Makefile to generate an executable file.
+
+In data file, users can choose various finite element spaces, newly designed gauss quadrature rules, and iterative solvers to solve discrete sparse linear system. 

@@ -1,0 +1,17 @@
+This directory includes source codes to solve Darcy flow with variable permiability tensor.
+
+I.open matlab
+II. On command window, type setpath
+III. run hybridimpDarcy or  LshapeimphybridDarcy
+
+1. hybridimpDarcy.m --- settings for RT0 or BDM1, bdry condition, uniform refinement, input data
+
+2. hybridimpDarcy.m  calls hfemimpDarcy.m --- on line 85(RT0) or 96(BDM1), can change hybrid-parameter=delta (either optimal delta or arbitrary delta)
+
+3. In simple darcy, dont need to run for loop improve=1:10, comment for loop and comment out     u=roughu; on lines 92(RT0) and 104(BDM1)  
+
+4. hfemimpDarcy.m calls main computing calls(DarcyRT0hybrid.m, DarcyBDM1hybrid.m and recoverp1.m recoverBDM1p.m, etc)
+
+5. In main computing calls, linear system solver is used x=A\b(internal matlab fuction) to solve Ax=b. Also can use preconditioner by using Schur complement.
+
+6.LshapeimphybridDarcy.m is function call to solve Lshape problem. settings are included in the file itself.

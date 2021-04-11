@@ -1,0 +1,26 @@
+x_beg, x_end, y_beg, y_end
+0. 1. 0. 1.
+homo or inho
+inho
+epsil
+0.037
+nx ny
+256 256
+ndx ndy
+16 16  
+beta_fac      
+1.
+method:"cgnc""seid""jaco""ssei"
+cgnc
+max_iter              
+20000
+tol(erance)            
+1.e-6
+nconstraint             
+3
+extend		  
+1
+extmom	          
+2
+omega  		  	
+1.95               

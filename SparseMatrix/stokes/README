@@ -1,0 +1,5 @@
+This directory includes source codes to solve Stokes problem for the family of nonconforming quadrilateral element P1 element with three degrees of freedom.
+
+The main source code is enclosedcavity.m
+For the Stokes flow, the indefinite discrete linear system is obtained,
+algebraic multigrid smoothers are used in iterative solver MINRES.

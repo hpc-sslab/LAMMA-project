@@ -1,0 +1,2 @@
+function result=src(x,y,eps)
+result=2*pi^2*sin(a*pi)*sin(b*pi)*(10*a + 10*b + cos(10*pi*(a + b))) + pi*cos(a*pi)*sin(b*pi)*(10*pi*sin(10*pi*(a + b)) - 10) + pi*cos(b*pi)*sin(a*pi)*(10*pi*sin(10*pi*(a + b)) - 10);
